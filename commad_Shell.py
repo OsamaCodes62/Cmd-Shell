@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 builtin = ["echo", "exit 0", "type"]
 extension = [".exe", ".bat", ".cmd"]
@@ -34,5 +35,19 @@ while True:
                 print(f"{forType} is {thePath}")
             else:
                 print(forType, ": command not found")
+        case ["pwd"]:
+            print(os.getcwd())
+        case ["cd", *arg]:
+            path = "".join(arg)
+            os.chdir(path)
         case _:
-            print(user_input,": is not a valid command")
+            user_cmd = user_input.split(" ")
+            fullCommand = getPath(user_cmd[0])
+
+            if fullCommand:
+                try:
+                    subprocess.run(user_cmd)
+                except:
+                    print(user_input,": is not a valid command")
+            else:
+                print(user_input,": is not a valid command")
